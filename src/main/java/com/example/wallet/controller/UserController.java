@@ -1,8 +1,9 @@
 package com.example.wallet.controller;
 
 import com.example.wallet.dto.UserRegisterRequest;
-import com.example.wallet.entity.User;
+import com.example.wallet.dto.UserResponse;
 import com.example.wallet.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +18,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id){
-        User user = userService.getUserById(id)
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id){
+        UserResponse user = userService.getUserById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "User not found"
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping
-     public ResponseEntity<User> registerUser(@RequestBody UserRegisterRequest userRegisterRequest){
-        User user = userService.registerUser(userRegisterRequest);
+     public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest){
+        UserResponse user = userService.registerUser(userRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 }
